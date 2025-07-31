@@ -10,7 +10,7 @@ const protect = async (req, res, next) => {
     }
     // console.log("working")
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.  user = await User.findById(decoded.id).select('-password');
+    req.user = await User.findById(decoded.id).select('-password');
     next();
   } catch (error) {
     console.error(error);
@@ -19,7 +19,7 @@ const protect = async (req, res, next) => {
 };
 
 const isEmployer = (req, res, next) => {
-  if (req.user && req.user.role === 'employer') {
+  if (req.user && req.user.role === 'recruiter') {
     // console.log("working")
     next();
   } else {

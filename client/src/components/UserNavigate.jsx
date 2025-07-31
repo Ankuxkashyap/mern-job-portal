@@ -1,0 +1,40 @@
+import { Link } from 'react-router-dom';
+import useAuthStore from '../store/auth';
+
+export const UserNavigate = () => {
+  const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.logout);
+
+  return (
+    <div className="absolute top-16 right-4 w-64 bg-gray-800 rounded-xl shadow-xl p-4 flex flex-col gap-2 z-50 md:right-10">
+      <Link
+        to={`/user/${user?.name}`}
+        className="text-white text-lg py-2 px-4 rounded hover:bg-gray-700 transition duration-200 text-center"
+        onClick={() => console.log('profile')}
+      >
+        Profile
+      </Link>
+
+      <Link
+        to="/setting"
+        className="text-white text-lg py-2 px-4 rounded hover:bg-gray-700 transition duration-200 text-center"
+      >
+        Settings
+      </Link>
+
+      <Link
+        to="/save-jobs"
+        className="text-white text-lg py-2 px-4 rounded hover:bg-gray-700 transition duration-200 text-center"
+      >
+        Saved Jobs
+      </Link>
+
+      <button
+        onClick={logout}
+        className="text-red-500 text-lg py-2 px-4 rounded hover:text-red-600 hover:bg-gray-700 transition duration-200 text-center"
+      >
+        Log Out
+      </button>
+    </div>
+  );
+};

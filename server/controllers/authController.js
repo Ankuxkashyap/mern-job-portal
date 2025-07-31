@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import User from '../models/userModel.js';
 import generateToken from '../utils/generateToken.js';
 import bcrypt from 'bcryptjs';
@@ -7,11 +8,12 @@ import bcrypt from 'bcryptjs';
 // @access  Public
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password} = req.body;
 
-    if (!name || !email || !password || !role) {
+    if (!name || !email || !password) {
       return res.status(400).json({ message: 'Please fill all fields' });
     }
+
 
     const userExists = await User.findOne({ email });
 
@@ -26,8 +28,9 @@ const registerUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      role,
     });
+
+
 
     const token = generateToken(user._id); // ✅ Fix here
 
@@ -41,8 +44,9 @@ const registerUser = async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
-      role: user.role,
       token,
+      role: user.role,
+      success: true,
       message: "Registration successful"
     });
   } catch (error) {
@@ -88,6 +92,7 @@ const loginUser = async (req, res) => {
       email: user.email,
       role: user.role,
       token,
+      success: true,
       message :"Login successful"
     });
   } catch (error) {
@@ -95,5 +100,20 @@ const loginUser = async (req, res) => {
     return res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+
+export const roleselction = async(req, res )=>{
+  try{
+    const {role} = req.body;
+    const id =  req.user._id
+    const user = await User.findOne(id).select('-password');;
+    user.role = role;
+    const updateRole = await user.save();
+    res.status(201).json({message:" Role update Successfully" ,success: true ,user : user})
+  }
+  catch(err){
+    console.error(err);
+    return res.status(500).json({ message: 'Server error', error: err.message });
+  }
+}
 
 export { registerUser, loginUser };

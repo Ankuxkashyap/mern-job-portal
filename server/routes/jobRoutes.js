@@ -1,4 +1,5 @@
 import express from 'express';
+
 const router = express.Router();
 
 import {
@@ -13,8 +14,8 @@ import {
 import { protect, isEmployer } from '../middlewares/authMiddleware.js';
 
 // Public routes
-router.get('/my-jobs', protect, isEmployer, getMyJobs); // Get jobs posted by logged-in employer
 router.get('/', getJobs); // Get all jobs
+router.get('/my-jobs', protect, isEmployer, getMyJobs); // Get jobs posted by logged-in employer
 router.get('/:id', getJobById); // Get single job by ID
 
 // Protected routes for employers

@@ -20,7 +20,15 @@ const jobSchema = mongoose.Schema(
     },
     salary: {
        type: Number
-      },
+    },
+    about:{
+      type:String,
+      required: true
+    },
+    requriments:{
+      type:String,
+      required: true
+    },
     postedBy: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,

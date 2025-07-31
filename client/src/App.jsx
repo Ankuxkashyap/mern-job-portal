@@ -1,21 +1,47 @@
+// App.jsx
+import './index.css';
+import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import { JobsPage} from './pages/JobsPage'
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import { Toaster } from 'react-hot-toast';
+import RoleSelect from './pages/RoleSelect';
+import { UserNavigate } from './components/UserNavigate';
+import { Profile } from './pages/Profile';
+import { Setting } from './pages/Setting'
+import { SaveJobs } from './pages/SaveJobs'
+import { MoreDetails } from './pages/MoreDetails';
 
-import './App.css'
-import Header from './components/Header.jsx' 
-import Landing from './components/Landing.jsx'
 
 function App() {
+  return (<>
+      <Toaster 
+        position="top-center"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#1f2937',
+            color: '#fff',
+            border: '1px solid #374151',
+          },
+        }}
+        />
 
-
-  return (
-    <>
-     <div value=" relative isolate "> 
-        <div className=" grid-background absolute inset-0 -z-10 h-full w-full bg-black/100 bg-[linear-gradient(to_right,rgba(255,255,255,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.07)_1px,transparent_1px)] bg-[size:40px_40px]">
-          <Header />
-          <Landing />
-      </div>
-  </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path='/user/:name' element={<Profile/>}/> 
+        <Route path='save-jobs' element={<SaveJobs/>} />
+        <Route path='setting' element={<Setting/>} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/select-role" element={<RoleSelect />} />
+        <Route path="/jobs" element={<JobsPage/>} />
+        <Route path="/jobs/:id" element={<MoreDetails/>}/>
+    </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
