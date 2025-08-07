@@ -16,6 +16,20 @@ const applicationSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    yearsOfExperience: {
+      type: Number,
+      required: true,
+    },
+    skills: {
+      type: String,
+      required: true,
+    },
+    education: {
+      type: String,
+      enum: ['Intermediate', 'Graduate', 'Post Graduate'],
+      required: true,
+    },
+
     status: {
       type: String,
       enum: ['pending', 'reviewed', 'rejected'],

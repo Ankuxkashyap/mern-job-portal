@@ -1,44 +1,61 @@
-import  Application  from '../models/applicationModel.js';
-import Job from '../models/jobModel.js';
+import fs from "fs";
+import cloudinary from "../config/cloudinary.js";
+import Job from "../models/jobModel.js";
+import Application from "../models/applicationModel.js";
 
-// @desc    Apply to a job
-// @route   POST /api/applications/:jobId/apply
-// @access  Private/Candidate
 const applyToJob = async (req, res) => {
   try {
     const { jobId } = req.params;
+    const { yearsOfExperience, skills, education } = req.body;
     const applicantId = req.user._id;
 
     if (!req.file) {
-      return res.status(400).json({ message: 'Resume file is required' });
+      return res.status(400).json({ message: "Resume file is required" });
     }
 
+    // req.file.path is already the Cloudinary URL
     const resumeUrl = req.file.path;
 
+    // Check job exists
     const job = await Job.findById(jobId);
-
     if (!job) {
-      return res.status(404).json({ message: 'Job not found' });
+      return res.status(404).json({ message: "Job not found" });
     }
 
-    const alreadyApplied = await Application.findOne({ job: jobId, applicant: applicantId });
-
+    // Prevent duplicate application
+    const alreadyApplied = await Application.findOne({
+      job: jobId,
+      applicant: applicantId,
+    });
     if (alreadyApplied) {
-      return res.status(400).json({ message: 'You have already applied for this job' });
+      return res
+        .status(400)
+        .json({ message: "You have already applied for this job" });
     }
 
+    // Save application in DB
     const application = await Application.create({
       job: jobId,
       applicant: applicantId,
       resumeUrl,
+      status: "pending",
+      yearsOfExperience,
+      skills,
+      education,
     });
 
-    res.status(201).json(application);
+    res.status(201).json({
+      message: "Application submitted successfully",
+      application,
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+export default applyToJob;
+
 
 // @desc    Get applications for a job
 // @route   GET /api/applications/:jobId/applicants
