@@ -21,7 +21,13 @@ const userSchema = mongoose.Schema(
       enum: ['candidate', 'recruiter'],
       default: 'candidate',
     },
-  },
+     savejobs:[
+      {
+      type:mongoose.Schema.Types.ObjectId,
+      ref : "Job",
+     }
+    ]
+  }, 
   {
     timestamps: true,
   }

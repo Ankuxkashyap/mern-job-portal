@@ -1,7 +1,36 @@
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "../api/axios"; // Adjust the path as necessary
+// import { useAuthStore } from "../store/authStore";
+import toast from "react-hot-toast";
 
 export const JobCart = ({ job }) => {
+
 const navigate = useNavigate();
+
+  const [savedJobs, setSavedJobs] = useState([]); // store jobIds
+
+    const handleSaveClick = async (jobId) => {
+      try {
+      if (savedJobs.includes(jobId)) {
+        // unsave
+        await axios.post("/saveJobs/unsave", { jobId });
+        setSavedJobs(savedJobs.filter((id) => id !== jobId));
+        toast.success("Job removed from saved jobs ❌");
+      } else {
+        // save
+        await axios.post("/saveJobs/save", { jobId });
+        setSavedJobs([...savedJobs, jobId]);
+        toast.success("Job saved successfully ✅");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong. Please try again.");
+    }
+  };
+
+    const saved = savedJobs.includes(job._id);
+
 
   const handelClick = (id)=>{
     navigate(`/jobs/${id}`)
@@ -23,9 +52,22 @@ const navigate = useNavigate();
             >
             More Details
             </button>
-            <button className="border border-gray-500 hover:border-red-500 hover:text-red-500 px-6 py-3 rounded-lg text-white font-medium">
-             Save Job
-          </button>
+
+            {saved ? (
+                  <button
+                    className="border border-red-500  hover:border-gray-500 hover:text-white text-red-500 px-6 py-3 rounded-lg  font-medium"
+                    onClick={() => handleSaveClick(job._id)}
+                  >
+                    Unsave Job
+                  </button>
+                ) : (
+                  <button
+                    className="border border-gray-500 hover:border-red-500 hover:text-red-500 px-6 py-3 rounded-lg text-white font-medium"
+                    onClick={() => handleSaveClick(job._id)}
+                  >
+                    Save Job
+                  </button>
+                )}
       </div>
     </div>
   );

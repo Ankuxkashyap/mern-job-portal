@@ -1,14 +1,21 @@
 import axios from "../api/axios";
 import { useEffect, useState } from "react";
+import useAuthStore from "../store/auth";
 import { useParams, useNavigate } from "react-router-dom";
 import {toast} from 'react-hot-toast';
 
 export const MoreDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const user = useAuthStore((state) => state.user);
 
+    console.log(user);
   const [job, setJob] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [applicantId, setApplicantId] = useState("");
+  const[alreadyApply,setAlreadyApply] = useState(false);  
+  const [applyJob, setApplyJob] = useState([]);
+
   const [formData, setFormData] = useState({
     yearsOfExperience: '',
     skills: '',
@@ -22,10 +29,12 @@ export const MoreDetails = () => {
       const res = await axios.get(`/jobs/${id}`);
       setJob(res.data);
       setFormData((prev) => ({ ...prev, id: res.data._id }));
+
     } catch (err) {
       console.log(err);
     }
   };
+  // console.log(job);
 
   useEffect(() => {
     jobFetch();
@@ -49,20 +58,48 @@ export const MoreDetails = () => {
             },
         });
 
-        console.log(res);
-
-        if (res.status === 200) {
-          setIsModalOpen(false);
-          toast.success("Application submitted successfully!");
-          navigate(-1);
-        }
+        // if (res.application.applicants?.length > 0) {
+        //   setApplicantId(res.application.applicants[0]);
+        // }
         toast.dismiss();
+        console.log(res.data.application);
+      setApplyJob(res.data.application);  
 
+      
+      res.data.application.applicants.forEach((applicant) => {
+        if (applicant.user === user._id) {
+          setAlreadyApply(true);
+        }
+      });
+      
+      toast.success("Application submitted successfully!");
+      if (res.status === 200) {
+        setIsModalOpen(false);
+        
+        navigate(-1);
+      }
+      toast.dismiss();
+      
     }catch(err){
-        console.log(err);
-        toast.error(err.response?.data?.message || "Failed to submit application");
+      console.log(err);
+      toast.error(err.response?.data?.message || "Failed to submit application");
     }
   };
+  // Check if the user has already applied for the job
+    useEffect(() => {
+    const checkIfApplied = async () => {
+      try {
+        const res = await axios.get(`/applications/${job._id}/check`);
+        setAlreadyApply(res.data.alreadyApplied);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    if (job?._id && user?._id) {
+      checkIfApplied();
+    }
+  }, [job?._id, user?._id]);
 
   const jobsalary = job.salary;
 
@@ -88,13 +125,13 @@ export const MoreDetails = () => {
         </p>
 
         <p className="mt-8 ml-2 md:ml-10 text-4xl font-bold">What we are looking for</p>
-        <ul className="mt-8 ml-4 md:ml-12 text-2xl list-disc space-y-4 max-w-4xl">
-          <li>Analyze large datasets to identify trends and patterns.</li>
-          <li>Develop predictive models and algorithms.</li>
-          <li>Collaborate with cross-functional teams.</li>
-          <li>Communicate findings and recommendations.</li>
-          <li>Stay updated in data science and ML trends.</li>
-        </ul>
+        <ul className="mt-6 ml-2 md:ml-10 list-disc space-y-2">
+          {job.requirements && job.requirements.map((req, index) => (
+            <li key={index} className="text-2xl">
+              {req}
+            </li>
+          ))}
+        </ul>       
 
         <div className="mt-8 ml-2 md:ml-10 text-gray-400 text-xl">
           Posted by:{" "}
@@ -102,12 +139,15 @@ export const MoreDetails = () => {
         </div>
 
         <div className="flex justify-center mt-12">
-          <button
-            className="bg-blue-600 hover:bg-blue-700 w-[95%] cursor-pointer text-white text-2xl font-bold p-3 rounded-lg transition duration-200"
-            onClick={() => setIsModalOpen(true)}
-          >
-            Apply
-          </button>
+          {alreadyApply ?  <button className="bg-red-700 hover:bg-red-700 w-[95%]  text-white text-2xl font-bold p-3 rounded-lg transition duration-200 cursor-not-allowed" disabled>
+            Already Applied
+          </button>:
+                  <button
+                    className="bg-blue-600 hover:bg-blue-700 w-[95%] cursor-pointer text-white text-2xl font-bold p-3 rounded-lg transition duration-200"
+                    onClick={() => setIsModalOpen(true)}
+                  >
+                    Apply
+                  </button>}
         </div>
       </div>
 

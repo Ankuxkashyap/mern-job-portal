@@ -6,18 +6,82 @@ import { JobCart } from '../components/JobCart';
 
 export const JobsPage = () => {
   const [jobs, setJobs] = useState([]);
-  
+  const [location, setLocation] = useState("");
+  const [company, setCompany] = useState("");
+  const [keyword, setKeyword] = useState("");
 
+  // Fetch all jobs without filters
   const fetchJobs = async () => {
     try {
       toast.loading('Loading jobs...');
       const res = await axios.get('/jobs');
       setJobs(res.data);
     } catch (err) {
-      console.log('Fetching jobs failed:', err);
+      console.error('Fetching jobs failed:', err);
+      toast.error('Failed to load jobs');
     } finally {
       toast.dismiss();
     }
+  };
+
+  // Fetch jobs by filters (location & company only)
+  const fetchFilteredJobs = async (filters) => {
+    try {
+      toast.loading('Filtering jobs...');
+      const res = await axios.get('/jobs/search', { params: filters });
+      setJobs(res.data.jobs || []);
+      toast.dismiss();
+
+      if (!res.data.jobs.length) {
+        toast('No jobs found with these filters', { icon: '⚠️' });
+      }
+    } catch (err) {
+      toast.dismiss();
+      toast.error('Failed to filter jobs');
+      console.error(err);
+    }
+  };
+
+  // Search by keyword (title)
+  const handleSearch = async () => {
+    if (!keyword.trim()) {
+      toast.error('Please enter a keyword to search');
+      return;
+    }
+
+    try {
+      toast.loading('Searching jobs...');
+      const res = await axios.get('/jobs/search', { params: { keyword } });
+      setJobs(res.data.jobs || []);
+      toast.dismiss();
+
+      if (!res.data.jobs.length) {
+        toast('No jobs found for the given keyword', { icon: '⚠️' });
+      }
+    } catch (err) {
+      toast.dismiss();
+      toast.error('Failed to search jobs');
+      console.error(err);
+    }
+  };
+
+  const handleLocationChange = (e) => {
+    const loc = e.target.value;
+    setLocation(loc);
+    fetchFilteredJobs({ location: loc, company });
+  };
+
+  const handleCompanyChange = (e) => {
+    const comp = e.target.value;
+    setCompany(comp);
+    fetchFilteredJobs({ location, company: comp });
+  };
+
+  const handleClearFilters = () => {
+    setKeyword("");
+    setLocation("");
+    setCompany("");
+    fetchJobs();
   };
 
   useEffect(() => {
@@ -36,7 +100,8 @@ export const JobsPage = () => {
     "Goa",
     "Gujarat",
     "Haryana",
-    "Himachal Pradesh"
+    "Himachal Pradesh",
+    "Hyderabad"
   ];
 
   const companies = [
@@ -47,7 +112,8 @@ export const JobsPage = () => {
     { id: 5, name: 'Atlassian' },
     { id: 6, name: 'Microsoft' },
     { id: 7, name: 'Uber' },
-    { id: 8, name: 'IBM' }
+    { id: 8, name: 'IBM' },
+    { id: 9, name: 'Insightify' }
   ];
 
   return (
@@ -56,42 +122,61 @@ export const JobsPage = () => {
       <h2 className="text-white text-5xl md:text-7xl font-bold text-center my-8">Latest Jobs</h2>
 
       <section className="px-4 md:px-20">
+        {/* Search by keyword */}
         <div className="flex flex-col md:flex-row justify-center gap-4 mb-6">
           <input
             type="text"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
             placeholder="Search Jobs by Title..."
             className="flex-1 p-3 bg-gray-900 text-white rounded-xl border border-gray-700 outline-none"
           />
-          <button className="px-6 py-3 bg-blue-600 text-white rounded-xl cursor-pointer hover:bg-blue-700 transition">
+          <button
+            className="px-6 py-3 bg-blue-600 text-white rounded-xl cursor-pointer hover:bg-blue-700 transition"
+            onClick={handleSearch}
+          >
             Search
           </button>
         </div>
 
+        {/* Filters: Location & Company */}
         <div className="flex flex-col md:flex-row justify-center gap-4 mb-8">
-          <select className="w-full md:w-[795px] p-3 bg-gray-900 text-white  rounded-xl border border-gray-700">
+          <select
+            className="w-full md:w-[795px] p-3 bg-gray-900 text-white rounded-xl border border-gray-700"
+            value={location}
+            onChange={handleLocationChange}
+          >
             <option value="">Filter by Location</option>
-            {locations.map((location, index) => (
-              <option key={index} value={location.toLowerCase()}>
-                {location}
+            {locations.map((loc, index) => (
+              <option key={index} value={loc.toLowerCase()}>
+                {loc}
               </option>
             ))}
           </select>
 
-          <select className="w-full md:w-[795px] p-3 bg-gray-900 text-white rounded-xl border border-gray-700">
+          <select
+            className="w-full md:w-[795px] p-3 bg-gray-900 text-white rounded-xl border border-gray-700"
+            value={company}
+            onChange={handleCompanyChange}
+          >
             <option value="">Filter by Company</option>
-            {companies.map((company) => (
-              <option key={company.id} value={company.name.toLowerCase()}>
-                {company.name}
+            {companies.map((comp) => (
+              <option key={comp.id} value={comp.name.toLowerCase()}>
+                {comp.name}
               </option>
             ))}
           </select>
 
-          <button className="px-6 py-3 bg-red-600 cursor-pointer text-white rounded-xl hover:bg-red-700 transition">
+          <button
+            className="px-6 py-3 bg-red-600 cursor-pointer text-white rounded-xl hover:bg-red-700 transition"
+            onClick={handleClearFilters}
+          >
             Clear Filter
           </button>
         </div>
       </section>
 
+      
       <div className="px-6 md:px-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {jobs.length > 0 ? (

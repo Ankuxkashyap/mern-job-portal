@@ -9,13 +9,18 @@ import RegisterPage from './pages/RegisterPage';
 import { Toaster } from 'react-hot-toast';
 import RoleSelect from './pages/RoleSelect';
 import { UserNavigate } from './components/UserNavigate';
+
 import { Profile } from './pages/Profile';
 import { Setting } from './pages/Setting'
 import { SaveJobs } from './pages/SaveJobs'
 import { MoreDetails } from './pages/MoreDetails';
+import { JobPost } from './pages/JobPost'
+import { MyApplication } from './pages/MyApplication';
 
+ 
 
 function App() {
+
   return (<>
       <Toaster 
         position="top-center"
@@ -39,6 +44,9 @@ function App() {
         <Route path="/select-role" element={<RoleSelect />} />
         <Route path="/jobs" element={<JobsPage/>} />
         <Route path="/jobs/:id" element={<MoreDetails/>}/>
+        <Route path="/post-job" element={<JobPost/>}/>
+        <Route path="/myApplication" element={<MyApplication/>}/>
+
     </Routes>
     </>
   );

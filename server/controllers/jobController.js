@@ -1,3 +1,4 @@
+import { application } from 'express';
 import Job from '../models/jobModel.js';
 
 // @desc    Fetch all jobs
@@ -45,7 +46,14 @@ const getJobById = async (req, res) => {
 // @access  Private/Employer
 const createJob = async (req, res) => {
   try {
-    const { title, description, company, location, salary } = req.body;
+    const { title, description, company, location, salary,requirements,about } = req.body;
+    if (!title || !description || !company || !location || !requirements || !about) {
+      return res.status(400).json({ message: 'Please fill all the fields' });
+    }
+    if (req.user.role !== 'employer') {
+      return res.status(401).json({ message: 'Not authorized as an employer' });
+    }
+  
 
     const job = new Job({
       title,
@@ -53,6 +61,9 @@ const createJob = async (req, res) => {
       company,
       location,
       salary,
+      requirements,
+      about,
+      applications: [],
       postedBy: req.user._id,
     });
 
@@ -136,4 +147,39 @@ const getMyJobs = async (req, res) => {
   }
 };
 
-export { getJobs, getJobById, createJob, updateJob, deleteJob, getMyJobs };
+ const getJobsBySearch = async( req,res)=>{
+  try{
+
+    const { keyword, location,company } = req.query;
+    const query = {};
+
+    if(!keyword && !location && !company){
+      return res.status(400).json({ message: 'Please provide a search keyword or location' });
+    }
+
+    if (keyword) {
+      query.title = { $regex: keyword, $options: 'i' };
+    }
+    if (location) {
+      query.location = { $regex: location, $options: 'i' };
+    }
+    if (company) {
+      query.company = { $regex: company, $options: 'i' };
+    }
+    const jobs = await Job.find(query).populate('postedBy', 'name email');
+    if (jobs.length === 0) {
+      return res.status(404).json({ message: 'No jobs found matching your criteria' });
+    }
+    res.status(200).json({message: "Jobs fetched successfully", jobs});
+
+  }catch(error){
+    res.status(500).json({ message: 'Failed to search jobs', error: error.message });
+  }
+
+}
+
+// const getjobsByc
+
+
+
+export { getJobs, getJobById, createJob, updateJob, deleteJob, getMyJobs,getJobsBySearch };

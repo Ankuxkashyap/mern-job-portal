@@ -25,10 +25,10 @@ const jobSchema = mongoose.Schema(
       type:String,
       required: true
     },
-    requriments:{
-      type:String,
-      required: true
-    },
+    requirements:{
+     type: [String], // Array of strings
+    required: true
+  },
     postedBy: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,

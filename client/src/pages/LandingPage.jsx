@@ -1,4 +1,5 @@
 // LandingPage.jsx
+import toast from 'react-hot-toast';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -12,6 +13,9 @@ import microsoft from '../assets/microsoft.webp'
 import  uber from '../assets/uber.svg' 
 import ibm from '../assets/ibm.svg'
 import { Testimonials } from '../components/Testimonials';
+import useAuthStore from '../store/auth';
+
+
 
 const companies = [
   { id: 1, name: 'Google', path: googleLogo },
@@ -25,6 +29,14 @@ const companies = [
 ];
 
 const LandingPage = () => {
+  const user = useAuthStore((state)=> state.user);
+    // console.log(user);
+    const handleClick = (e) => {
+        if (user?.role !== "recruiter") {
+          e.preventDefault(); // stop navigation
+          toast.error("Only recruiters can post jobs!");
+        }
+      };
     const repeatedCompanies = [...companies, ...companies]; 
   return (
 
@@ -48,8 +60,9 @@ const LandingPage = () => {
           >
             Browse Jobs
           </Link>
-          <Link
+          <Link 
             to="/post-job"
+            onClick={handleClick}
             className="border border-white text-white px-6 py-3 rounded-full hover:bg-white hover:text-gray-900 transition-all duration-300 shadow-md hover:shadow-white/40"
           >
             Post a Job
