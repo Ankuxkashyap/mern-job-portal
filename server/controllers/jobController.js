@@ -50,7 +50,7 @@ const createJob = async (req, res) => {
     if (!title || !description || !company || !location || !requirements || !about) {
       return res.status(400).json({ message: 'Please fill all the fields' });
     }
-    if (req.user.role !== 'employer') {
+    if (req.user.role !== 'recruiter') {
       return res.status(401).json({ message: 'Not authorized as an employer' });
     }
   

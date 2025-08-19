@@ -16,6 +16,8 @@ import { SaveJobs } from './pages/SaveJobs'
 import { MoreDetails } from './pages/MoreDetails';
 import { JobPost } from './pages/JobPost'
 import { MyApplication } from './pages/MyApplication';
+import { AdminDashboard } from './pages/AdminDashboard';
+import { AdminMoredetails } from './pages/AdminMoredetails';
 
  
 
@@ -37,15 +39,17 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path='/user/:name' element={<Profile/>}/> 
-        <Route path='save-jobs' element={<SaveJobs/>} />
-        <Route path='setting' element={<Setting/>} />
+        <Route path='/save-jobs' element={<SaveJobs/>} />
+        <Route path='/setting' element={<Setting/>} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/select-role" element={<RoleSelect />} />
+        <Route path="/select-role" element={<RoleSelect />} />  
         <Route path="/jobs" element={<JobsPage/>} />
         <Route path="/jobs/:id" element={<MoreDetails/>}/>
         <Route path="/post-job" element={<JobPost/>}/>
         <Route path="/myApplication" element={<MyApplication/>}/>
+        <Route path='/admindashboard' element={<AdminDashboard/>} />
+        <Route path='/adminjob' element={<AdminMoredetails/>} />
 
     </Routes>
     </>
