@@ -24,7 +24,7 @@ export const AdminJobCart = ({ job }) => {
 
       
       <button
-        className="bg-indigo-600 text-white w-full py-3 text-lg rounded-xl hover:bg-indigo-500 transition"
+        className="bg-indigo-600 text-white w-full py-3 text-lg rounded-xl hover:bg-indigo-500 transition cursor-pointer"
         onClick={() => navigate(`/adminjob`, { state: { job } })}
 >
   More Details

@@ -9,7 +9,6 @@ export const useSavedJobsStore = create((set, get) => ({
       const res = await axios.get("/saveJobs");
       console.log("Fetched saved jobs:", res.data);
 
-      // Extract only job IDs
       const jobIds = res.data?.savejobs?.map((job) => job._id) || [];
       set({ savedJobs: jobIds });
     } catch (err) {

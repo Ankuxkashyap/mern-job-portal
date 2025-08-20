@@ -25,7 +25,7 @@ const Navbar = () => {
     
         {
         
-          user?.role==="recruiter" ?   <Link to="post-job" className='absolute top-7 right-25 md:right-40 text-xl p-2 bg-red-800 rounded-full text-white-800 text-center flex items-center md:gap-2' ><MdEditDocument /> Post job</Link> : null
+          user?.role==="recruiter" ?   <Link to="/post-job" className='absolute top-7 right-25 md:right-40 text-xl p-2 bg-red-800 rounded-full text-white-800 text-center flex items-center md:gap-2' ><MdEditDocument /> Post job</Link> : null
         }
 
       { user ? 

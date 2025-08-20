@@ -32,7 +32,7 @@ const registerUser = async (req, res) => {
 
 
 
-    const token = generateToken(user._id); // ✅ Fix here
+    const token = generateToken(user._id); 
 
     res.cookie('token', token, {
       httpOnly: true,
@@ -115,5 +115,56 @@ export const roleselction = async(req, res )=>{
     return res.status(500).json({ message: 'Server error', error: err.message });
   }
 }
+
+
+export const updateProfile = async (req, res) => {
+  try {
+    const userId = req.user._id; 
+    const { name, email, oldPassword, newPassword, confirmPassword } = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    
+    if (name) user.name = name;
+    if (email) user.email = email;
+
+    
+    if (oldPassword || newPassword || confirmPassword) {
+      
+      const isMatch = await bcrypt.compare(oldPassword, user.password);
+      if (!isMatch) {
+        return res.status(400).json({ message: "Old password is incorrect" });
+      }
+
+      
+      if (newPassword !== confirmPassword) {
+        return res.status(400).json({ message: "New password and confirm password do not match" });
+      }
+
+      
+      const isSame = await bcrypt.compare(newPassword, user.password);
+      if (isSame) {
+        return res.status(400).json({ message: "New password must be different from old password" });
+      }
+
+      
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(newPassword, salt);
+    }
+
+    await user.save();
+    res.status(200).json({
+      message: "Profile updated successfully",
+      user: {
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong", error: error.message });
+  }
+};
 
 export { registerUser, loginUser };

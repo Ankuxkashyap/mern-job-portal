@@ -1,8 +1,6 @@
 import Application from '../models/applicationModel.js';
 
-// @desc    Get jobs a user has applied to
-// @route   GET /api/users/my-applications
-// @access  Private/Candidate
+
 
 const getMyApplications = async (req, res) => {
   try {
