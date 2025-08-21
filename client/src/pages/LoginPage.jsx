@@ -1,36 +1,48 @@
 // LoginPage.jsx
 import axios from 'axios';
-import { useState ,useEffect} from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
 import useAuthStore from "../store/auth.js"
 
 const LoginPage = () => {
+  const login = useAuthStore((state) => state.login);
+  const guestLogin = useAuthStore((state) => state.guestLogin); 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-    const login = useAuthStore((state) => state.login);
+  const navigator = useNavigate();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    const navigator = useNavigate();
-
-    const HandleSubmit = async(e)=>{
-        e.preventDefault();
-        try {
-            const res = await login(email, password);
-            if(res.success){
-                toast.success("Login successful");
-                navigator('/');
-            }else{
-                toast.error(res.message);
-            }
-        } catch (error) {
-            console.error('Login failed:', error);
-            toast.error('Login failed. Please try again.');
-        }
+  const HandleSubmit = async(e)=>{
+    e.preventDefault();
+    try {
+      const res = await login(email, password);
+      if(res.success){
+        toast.success("Login successful");
+        navigator('/');
+      }else{
+        toast.error(res.message);
+      }
+    } catch (error) {
+      console.error('Login failed:', error);
+      toast.error('Login failed. Please try again.');
     }
+  };
 
+  const HandleGuestLogin = async()=>{
+    try {
+      const res = await guestLogin();
+      if(res.success){
+        toast.success("Guest login successful");
+        navigator('/');
+      }else{
+        toast.error(res.message);
+      }
+    } catch (error) {
+      console.error("Guest login failed:", error);
+      toast.error("Guest login failed. Please try again.");
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-black to-gray-800 px-6">
@@ -70,6 +82,7 @@ const LoginPage = () => {
             </Link>
           </div>
 
+          
           <button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition duration-300"
@@ -78,6 +91,21 @@ const LoginPage = () => {
             Sign In
           </button>
         </form>
+
+        
+        <div className="flex items-center my-6">
+          <div className="flex-grow border-t border-gray-700"></div>
+          <span className="px-3 text-gray-500 text-sm">or</span>
+          <div className="flex-grow border-t border-gray-700"></div>
+        </div>
+
+        
+        <button
+          onClick={HandleGuestLogin}
+          className="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 rounded-lg transition duration-300"
+        >
+          Continue as Guest
+        </button>
 
         <p className="text-center text-sm text-gray-400 mt-6">
           Don’t have an account?{' '}

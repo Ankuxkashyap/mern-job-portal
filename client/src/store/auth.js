@@ -58,6 +58,19 @@ const useAuthStore = create((set, get) => {
       }
     },
 
+    guestLogin: async ()=>{
+      try {
+        const response = await axios.post('/auth/guest-login');
+        set({ user: response.data, isAuthenticated: true });
+        localStorage.setItem('user', JSON.stringify(response.data));
+        toast.success("Guest login successful!");
+        return response.data;
+      } catch (error) {
+        toast.error(error.response?.data?.message || "Guest login failed");
+        throw error;
+      }
+    } ,
+
     updateProfile: async (name, email, oldPassword, newPassword, confirmPassword) => {
       try {
         const response = await axios.put('/auth/updateProfile', {

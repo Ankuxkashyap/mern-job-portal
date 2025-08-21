@@ -10,7 +10,7 @@ const storage = new CloudinaryStorage({
     format: "pdf",                      // Ensure .pdf extension
     type: "upload",                     // Force upload type
     public_id: (req, file) => 
-      Date.now() + "-" + file.originalname.split(".")[0], // Unique name
+       Date.now() + "-resume",
   },
 });
 

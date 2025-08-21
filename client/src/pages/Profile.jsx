@@ -7,6 +7,7 @@ export const Profile = () => {
     const navigator = useNavigate();
     
   const user = useAuthStore((state) => state.user);
+  console.log(user);
     const [jobs, setJobs] = useState([]);
     const [applications, setApplications] = useState([]);
     

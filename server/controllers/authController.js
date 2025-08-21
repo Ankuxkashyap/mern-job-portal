@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import User from '../models/userModel.js';
 import generateToken from '../utils/generateToken.js';
-import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 // @desc    Register a new user
 // @route   POST /api/auth/register
@@ -164,6 +164,35 @@ export const updateProfile = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong", error: error.message });
+  }
+};
+
+export const guestLogin = async (req, res) => {
+  try {
+    
+    const guestUser = {
+      id: "guest_" + Date.now(),   
+      name: "Guest User",
+      email: "guest@example.com",
+      role: "candidate",
+    };
+
+    
+    const token = jwt.sign(
+      { id: guestUser.id, role: guestUser.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" } 
+    );
+
+    res.status(200).json({
+      message: "Guest login successful",
+      token,
+      user: guestUser
+    });
+
+  } catch (error) {
+    console.error("Guest login error:", error);
+    res.status(500).json({ message: "Guest login failed" });
   }
 };
 
