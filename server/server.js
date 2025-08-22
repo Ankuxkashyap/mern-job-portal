@@ -16,13 +16,18 @@ connectDB();
 
 const app = express();
 
-app.use(cors(
-  {
-    origin: ['http://localhost:5173','https://mern-job-portal-lovat.vercel.app/'], 
-    credentials: true, 
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  }
-));
+const corsOptions = {
+  origin: ["http://localhost:5173", "https://mern-job-portal-lovat.vercel.app"],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+};
+
+
+app.use(cors(corsOptions));
+
+
+app.options("*", cors(corsOptions));
+
 app.use(express.json());
 app.use(cookieParser());
 
