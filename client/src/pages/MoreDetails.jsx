@@ -115,8 +115,10 @@ export const MoreDetails = () => {
 
         <h2 className="mt-6 ml-2 md:ml-10 text-6xl font-bold">{job.title}</h2>
         <div className="mt-6 m-3 md:m-10 flex flex-row justify-between">
-          <p className="text-2xl">{job.location}</p>
-          <p className="text-2xl">Salary: ${jobsalary}</p>
+          <p className="text-2xl"> Location : {String(job.location).charAt(0).toUpperCase() + String(job.location).slice(1)}</p>
+          <p className="text-2xl">
+          Salary: ₹{Number(jobsalary).toLocaleString("en-IN")}
+        </p>
         </div>
 
         <p className="mt-6 ml-2 md:ml-10 text-4xl font-bold">About this job</p>

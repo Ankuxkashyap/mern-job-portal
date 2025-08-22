@@ -42,7 +42,7 @@ export const JobsPage = () => {
     }
   };
 
-  // Search by keyword (title)
+  
   const handleSearch = async () => {
     if (!keyword.trim()) {
       toast.error('Please enter a keyword to search');
@@ -101,7 +101,8 @@ export const JobsPage = () => {
     "Gujarat",
     "Haryana",
     "Himachal Pradesh",
-    "Hyderabad"
+    "Hyderabad",
+    "Remote"
   ];
 
   const companies = [

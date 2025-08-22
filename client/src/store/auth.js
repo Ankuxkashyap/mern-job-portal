@@ -26,6 +26,7 @@ const useAuthStore = create((set, get) => {
       try {
         set({ user: null, isAuthenticated: false });
         localStorage.removeItem('user');
+        navigator('/');
         toast.success("Logged out");
       } catch (error) {
         console.error('Logout failed:', error);
@@ -46,18 +47,28 @@ const useAuthStore = create((set, get) => {
     },
 
     roleSelect: async (role) => {
-      try {
-        const res = await axios.post('/auth/role-selection', { role });
-        set((state) => ({ user: { ...state.user, role: res.data.role } }));
-        localStorage.setItem('user', JSON.stringify(get().user));
-        toast.success("Role updated");
-        return res.data;
-      } catch (err) {
-        toast.error("Role selection failed");
-        return { success: false };
-      }
-    },
+  // console.log("Role selection initiated for role:", role);
+  try {
+    const res = await axios.post('/auth/role-selection', { role });
 
+    
+    const currentUser = get().user || {};
+
+    
+    const updatedUser = { ...currentUser, role: res.data.role };
+
+    set({ user: updatedUser });
+
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+
+    toast.success("Role updated");
+    return res.data;
+  } catch (err) {
+    console.error("Role selection error:", err);
+    toast.error("Role selection failed");
+    return { success: false };
+  }
+},
     guestLogin: async ()=>{
       try {
         const response = await axios.post('/auth/guest-login');

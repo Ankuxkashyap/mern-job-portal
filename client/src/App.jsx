@@ -47,8 +47,6 @@ function App() {
         <Route path="/jobs" element={<JobsPage/>} />
         <Route path="/jobs/:id" element={<MoreDetails/>}/>
         <Route path="/post-job" element={<JobPost/>}/>
-
-
         <Route path="/myApplication" element={<MyApplication/>}/>
         <Route path='/admindashboard' element={<AdminDashboard/>} />
         <Route path='/adminjob' element={<AdminMoredetails/>} />

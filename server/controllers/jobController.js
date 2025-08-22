@@ -47,6 +47,7 @@ const getJobById = async (req, res) => {
 const createJob = async (req, res) => {
   try {
     const { title, description, company, location, salary,requirements,about } = req.body;
+    
     if (!title || !description || !company || !location || !requirements || !about) {
       return res.status(400).json({ message: 'Please fill all the fields' });
     }
@@ -106,9 +107,6 @@ const updateJob = async (req, res) => {
   }
 };
 
-// @desc    Delete a job
-// @route   DELETE /api/jobs/:id
-// @access  Private/Employer
 const deleteJob = async (req, res) => {
   try {
     const job = await Job.findById(req.params.id);

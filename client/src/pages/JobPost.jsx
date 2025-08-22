@@ -77,6 +77,7 @@ export const JobPost = () => {
     "Arunachal Pradesh",
     "Assam",
     "Bihar",
+    "Bangalore",
     "Chandigarh",
     "Chhattisgarh",
     "Delhi",
@@ -85,6 +86,7 @@ export const JobPost = () => {
     "Haryana",
     "Himachal Pradesh",
     "Hyderabad",
+    "Remote",
   ];
 
   const companies = [

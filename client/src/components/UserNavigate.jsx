@@ -18,7 +18,7 @@ export const UserNavigate = () => {
 
       
 
-      {user.role === "recruiter" ? <Link
+      {user?.role === "recruiter" ? <Link
         to="/admindashboard"
         className="text-white text-lg py-2 px-4 rounded hover:bg-gray-700 transition duration-200 text-center"
       >
