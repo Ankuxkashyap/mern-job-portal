@@ -14,6 +14,7 @@ import  uber from '../assets/uber.svg'
 import ibm from '../assets/ibm.svg'
 import { Testimonials } from '../components/Testimonials';
 import useAuthStore from '../store/auth';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -30,7 +31,16 @@ const companies = [
 
 const LandingPage = () => {
   const user = useAuthStore((state)=> state.user);
-    // console.log(user);
+  const navigate = useNavigate();
+  // console.log(user);
+    const handleJobsClick = (e) => {
+      if (!user) {
+       e.preventDefault();
+       toast.error("Please log in to browse jobs");    
+      }
+
+    };  
+
     const handleClick = (e) => {
         if (user?.role !== "recruiter") {
           e.preventDefault(); // stop navigation
@@ -56,6 +66,7 @@ const LandingPage = () => {
         <div className="mt-8 flex flex-col sm:flex-row gap-4">
           <Link
             to="/jobs"
+            onClick={handleJobsClick}
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-full transition-all duration-300 shadow-md hover:shadow-blue-500/50"
           >
             Browse Jobs
