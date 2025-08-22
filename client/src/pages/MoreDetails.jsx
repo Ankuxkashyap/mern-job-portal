@@ -113,7 +113,7 @@ export const MoreDetails = () => {
           <span className="text-4xl font-medium">←</span>
         </button>
 
-        <h2 className="mt-6 ml-2 md:ml-10 text-6xl font-bold">{job.title}</h2>
+        <h2 className="mt-6 ml-2 md:ml-10 text-4xl  md:text-6xl font-bold">{job.title}</h2>
         <div className="mt-6 m-3 md:m-10 flex flex-row justify-between">
           <p className="text-2xl"> Location : {String(job.location).charAt(0).toUpperCase() + String(job.location).slice(1)}</p>
           <p className="text-2xl">
@@ -121,12 +121,12 @@ export const MoreDetails = () => {
         </p>
         </div>
 
-        <p className="mt-6 ml-2 md:ml-10 text-4xl font-bold">About this job</p>
-        <p className="mt-6 ml-2 md:ml-10 text-2xl">
+        <p className="mt-6 ml-2 md:ml-10 text-2xl md:text-4xl font-bold">About this job</p>
+        <p className="mt-6 ml-2 md:ml-10 text-xl md:text-2xl">
           Apply is seeking an experienced Data Scientist to join our analytics team...
         </p>
 
-        <p className="mt-8 ml-2 md:ml-10 text-4xl font-bold">What we are looking for</p>
+        <p className="mt-8 ml-2 md:ml-10 text-2xl md:text-4xl font-bold">What we are looking for</p>
         <ul className="mt-6 ml-2 md:ml-10 list-disc space-y-2">
           {job.requirements && job.requirements.map((req, index) => (
             <li key={index} className="text-2xl">
@@ -135,7 +135,7 @@ export const MoreDetails = () => {
           ))}
         </ul>       
 
-        <div className="mt-8 ml-2 md:ml-10 text-gray-400 text-xl">
+        <div className="mt-8 ml-2 md:ml-10 text-gray-400 text-lg md:text-xl">
           Posted by:{" "}
           <span className="text-white font-semibold">{job.postedBy?.email}</span>
         </div>
