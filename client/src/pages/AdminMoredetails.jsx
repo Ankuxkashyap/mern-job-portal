@@ -22,7 +22,7 @@ export const AdminMoredetails = () => {
         // console.log(" Applicants structure:", jobData.applicants[0]);
       }
     } catch (error) {
-      console.error("❌ Error fetching applicants:", error.response?.data || error.message);
+      console.error(" Error fetching applicants:", error.response?.data || error.message);
       toast.error("Failed to fetch applicants");
     }
   };
@@ -55,14 +55,14 @@ export const AdminMoredetails = () => {
       fetchApplicants(jobId);
 
       toast.success("Status updated to " + newStatus);
-      console.log(" Status updated successfully");
+      // console.log(" Status updated successfully");
     } catch (error) {
       console.error("Error updating status:", error.response?.data || error.message);
       toast.error("Failed to update status");
     }
   };
 
-  // ✅ Status color mapping
+  
   const getStatusClass = (status) => {
     switch (status) {
       case "pending":

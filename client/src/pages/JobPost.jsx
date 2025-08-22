@@ -46,7 +46,7 @@ export const JobPost = () => {
                 setAbout("");
             }
             toast.dismiss();
-            console.log(res);
+            // console.log(res);
         }
         catch(err){
             console.error(err);

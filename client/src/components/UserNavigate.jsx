@@ -11,7 +11,6 @@ export const UserNavigate = () => {
       <Link
         to={`/user/${user?.name}`}
         className="text-white text-lg py-2 px-4 rounded hover:bg-gray-700 transition duration-200 text-center"
-        onClick={() => console.log('profile')}
       >
         Profile
       </Link>

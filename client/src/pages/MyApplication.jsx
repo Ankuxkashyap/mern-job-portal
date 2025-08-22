@@ -6,8 +6,9 @@ import { Briefcase, GraduationCap, Code, Clock, Download, FileDown } from "lucid
 
 export const MyApplication = () => {
     const user = useAuthStore((state) => state.user);
+    
   const [applications, setApplications] = useState([]);
-    console.log(applications);
+    // console.log(applications);
   const fetchMyApplications = async () => {
     try {
       const res = await axios.get("/applications/myApplication");

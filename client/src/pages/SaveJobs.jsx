@@ -10,7 +10,7 @@ export const SaveJobs = () => {
   const fetchSavedJobs = async () => {
     try {
       const res = await axios.get("/saveJobs");
-      console.log("Fetched saved jobs:", res.data);
+      // console.log("Fetched saved jobs:", res.data);
       setJobs(res.data.savejobs);
     } catch (error) {
       console.error("Error fetching saved jobs:", error);

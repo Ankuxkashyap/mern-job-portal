@@ -14,8 +14,8 @@ const Navbar = () => {
 
   const isAuthenticated = useAuthStore((state)=>state.isAuthenticated);
   const [userPanel, setuserPanel] = useState(false);
-  console.log(user);
-  
+  // console.log(user);
+
   const handeBlur = ()=>{
     setTimeout(()=>{
       setuserPanel(false)
