@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://mern-job-portal-0ey2.onrender.com/',
+        target: 'http://localhost:5000',
         changeOrigin: true,
         secure: false,
       },
