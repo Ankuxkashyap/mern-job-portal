@@ -35,5 +35,5 @@ Recruiters can post jobs and manage applications.
 
 ### 1. Clone Repo  
 
-git clone https://github.com/yourusername/mern-job-portal.git
+git clone https://github.com/Ankuxkashyap/mern-job-portal.git
 cd mern-job-portal
